@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "astro-identity-and-access-management-iam-api-client"
+name = "astro-iam-api-client"
 version = "v1beta1"
 description = "A client library for accessing Astro Identity and Access Management (IAM) API"
 

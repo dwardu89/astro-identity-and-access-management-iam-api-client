@@ -10,6 +10,7 @@ from ..models.user_status import UserStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.deployment_role import DeploymentRole
     from ..models.workspace_role import WorkspaceRole
 
 
@@ -29,6 +30,7 @@ class User:
         updated_at (datetime.datetime): The time when the user was updated in UTC, formatted as `YYYY-MM-DDTHH:MM:SSZ`.
             Example: 2022-11-22T04:37:12Z.
         username (str): The user's username. Example: user1@company.com.
+        deployment_roles (Union[Unset, List['DeploymentRole']]): The user's Deployment roles.
         organization_role (Union[Unset, UserOrganizationRole]): The user's Organization role. Example:
             ORGANIZATION_MEMBER.
         workspace_roles (Union[Unset, List['WorkspaceRole']]): The user's Workspace roles.
@@ -41,6 +43,7 @@ class User:
     status: UserStatus
     updated_at: datetime.datetime
     username: str
+    deployment_roles: Union[Unset, List["DeploymentRole"]] = UNSET
     organization_role: Union[Unset, UserOrganizationRole] = UNSET
     workspace_roles: Union[Unset, List["WorkspaceRole"]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -56,6 +59,14 @@ class User:
         updated_at = self.updated_at.isoformat()
 
         username = self.username
+        deployment_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.deployment_roles, Unset):
+            deployment_roles = []
+            for deployment_roles_item_data in self.deployment_roles:
+                deployment_roles_item = deployment_roles_item_data.to_dict()
+
+                deployment_roles.append(deployment_roles_item)
+
         organization_role: Union[Unset, str] = UNSET
         if not isinstance(self.organization_role, Unset):
             organization_role = self.organization_role.value
@@ -81,6 +92,8 @@ class User:
                 "username": username,
             }
         )
+        if deployment_roles is not UNSET:
+            field_dict["deploymentRoles"] = deployment_roles
         if organization_role is not UNSET:
             field_dict["organizationRole"] = organization_role
         if workspace_roles is not UNSET:
@@ -90,6 +103,7 @@ class User:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.deployment_role import DeploymentRole
         from ..models.workspace_role import WorkspaceRole
 
         d = src_dict.copy()
@@ -106,6 +120,13 @@ class User:
         updated_at = isoparse(d.pop("updatedAt"))
 
         username = d.pop("username")
+
+        deployment_roles = []
+        _deployment_roles = d.pop("deploymentRoles", UNSET)
+        for deployment_roles_item_data in _deployment_roles or []:
+            deployment_roles_item = DeploymentRole.from_dict(deployment_roles_item_data)
+
+            deployment_roles.append(deployment_roles_item)
 
         _organization_role = d.pop("organizationRole", UNSET)
         organization_role: Union[Unset, UserOrganizationRole]
@@ -129,6 +150,7 @@ class User:
             status=status,
             updated_at=updated_at,
             username=username,
+            deployment_roles=deployment_roles,
             organization_role=organization_role,
             workspace_roles=workspace_roles,
         )

@@ -1,41 +1,48 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error import Error
-from ...models.subject_roles import SubjectRoles
-from ...models.update_user_roles_request import UpdateUserRolesRequest
-from ...types import Response
+from ...models.list_permission_groups_scope_type import ListPermissionGroupsScopeType
+from ...models.permission_group import PermissionGroup
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-    organization_id: str,
-    user_id: str,
     *,
-    json_body: UpdateUserRolesRequest,
+    scope_type: Union[Unset, None, ListPermissionGroupsScopeType] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
-    json_json_body = json_body.to_dict()
+    params: Dict[str, Any] = {}
+    json_scope_type: Union[Unset, None, str] = UNSET
+    if not isinstance(scope_type, Unset):
+        json_scope_type = scope_type.value if scope_type else None
+
+    params["scopeType"] = json_scope_type
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
-        "method": "post",
-        "url": "/organizations/{organizationId}/users/{userId}/roles".format(
-            organizationId=organization_id,
-            userId=user_id,
-        ),
-        "json": json_json_body,
+        "method": "get",
+        "url": "/authorization/permission-groups",
+        "params": params,
     }
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Error, SubjectRoles]]:
+) -> Optional[Union[Error, List["PermissionGroup"]]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = SubjectRoles.from_dict(response.json())
+        response_200 = []
+        _response_200 = response.json()
+        for response_200_item_data in _response_200:
+            response_200_item = PermissionGroup.from_dict(response_200_item_data)
+
+            response_200.append(response_200_item)
 
         return response_200
     if response.status_code == HTTPStatus.BAD_REQUEST:
@@ -50,10 +57,6 @@ def _parse_response(
         response_403 = Error.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
-        response_404 = Error.from_dict(response.json())
-
-        return response_404
     if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
         response_500 = Error.from_dict(response.json())
 
@@ -66,7 +69,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Error, SubjectRoles]]:
+) -> Response[Union[Error, List["PermissionGroup"]]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -76,33 +79,27 @@ def _build_response(
 
 
 def sync_detailed(
-    organization_id: str,
-    user_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateUserRolesRequest,
-) -> Response[Union[Error, SubjectRoles]]:
-    """Update a user's roles
+    scope_type: Union[Unset, None, ListPermissionGroupsScopeType] = UNSET,
+) -> Response[Union[Error, List["PermissionGroup"]]]:
+    """List authorization permission groups
 
-     Update Organization and Workspace roles for a user.
+     List the available permissions you can grant to a custom role.
 
     Args:
-        organization_id (str):
-        user_id (str):
-        json_body (UpdateUserRolesRequest):
+        scope_type (Union[Unset, None, ListPermissionGroupsScopeType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, SubjectRoles]]
+        Response[Union[Error, List['PermissionGroup']]]
     """
 
     kwargs = _get_kwargs(
-        organization_id=organization_id,
-        user_id=user_id,
-        json_body=json_body,
+        scope_type=scope_type,
     )
 
     response = client.get_httpx_client().request(
@@ -113,65 +110,53 @@ def sync_detailed(
 
 
 def sync(
-    organization_id: str,
-    user_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateUserRolesRequest,
-) -> Optional[Union[Error, SubjectRoles]]:
-    """Update a user's roles
+    scope_type: Union[Unset, None, ListPermissionGroupsScopeType] = UNSET,
+) -> Optional[Union[Error, List["PermissionGroup"]]]:
+    """List authorization permission groups
 
-     Update Organization and Workspace roles for a user.
+     List the available permissions you can grant to a custom role.
 
     Args:
-        organization_id (str):
-        user_id (str):
-        json_body (UpdateUserRolesRequest):
+        scope_type (Union[Unset, None, ListPermissionGroupsScopeType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, SubjectRoles]
+        Union[Error, List['PermissionGroup']]
     """
 
     return sync_detailed(
-        organization_id=organization_id,
-        user_id=user_id,
         client=client,
-        json_body=json_body,
+        scope_type=scope_type,
     ).parsed
 
 
 async def asyncio_detailed(
-    organization_id: str,
-    user_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateUserRolesRequest,
-) -> Response[Union[Error, SubjectRoles]]:
-    """Update a user's roles
+    scope_type: Union[Unset, None, ListPermissionGroupsScopeType] = UNSET,
+) -> Response[Union[Error, List["PermissionGroup"]]]:
+    """List authorization permission groups
 
-     Update Organization and Workspace roles for a user.
+     List the available permissions you can grant to a custom role.
 
     Args:
-        organization_id (str):
-        user_id (str):
-        json_body (UpdateUserRolesRequest):
+        scope_type (Union[Unset, None, ListPermissionGroupsScopeType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, SubjectRoles]]
+        Response[Union[Error, List['PermissionGroup']]]
     """
 
     kwargs = _get_kwargs(
-        organization_id=organization_id,
-        user_id=user_id,
-        json_body=json_body,
+        scope_type=scope_type,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -180,34 +165,28 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    organization_id: str,
-    user_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateUserRolesRequest,
-) -> Optional[Union[Error, SubjectRoles]]:
-    """Update a user's roles
+    scope_type: Union[Unset, None, ListPermissionGroupsScopeType] = UNSET,
+) -> Optional[Union[Error, List["PermissionGroup"]]]:
+    """List authorization permission groups
 
-     Update Organization and Workspace roles for a user.
+     List the available permissions you can grant to a custom role.
 
     Args:
-        organization_id (str):
-        user_id (str):
-        json_body (UpdateUserRolesRequest):
+        scope_type (Union[Unset, None, ListPermissionGroupsScopeType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, SubjectRoles]
+        Union[Error, List['PermissionGroup']]
     """
 
     return (
         await asyncio_detailed(
-            organization_id=organization_id,
-            user_id=user_id,
             client=client,
-            json_body=json_body,
+            scope_type=scope_type,
         )
     ).parsed

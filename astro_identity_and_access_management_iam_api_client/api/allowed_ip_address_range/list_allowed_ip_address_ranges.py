@@ -5,28 +5,22 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.allowed_ip_address_ranges_paginated import AllowedIpAddressRangesPaginated
 from ...models.error import Error
-from ...models.list_users_sorts_item import ListUsersSortsItem
-from ...models.users_paginated import UsersPaginated
+from ...models.list_allowed_ip_address_ranges_sorts_item import ListAllowedIpAddressRangesSortsItem
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     organization_id: str,
     *,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
+    sorts: Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
     params: Dict[str, Any] = {}
-    params["workspaceId"] = workspace_id
-
-    params["deploymentId"] = deployment_id
-
     params["offset"] = offset
 
     params["limit"] = limit
@@ -48,7 +42,7 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": "/organizations/{organizationId}/users".format(
+        "url": "/organizations/{organizationId}/allowed-ip-address-ranges".format(
             organizationId=organization_id,
         ),
         "params": params,
@@ -57,9 +51,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Error, UsersPaginated]]:
+) -> Optional[Union[AllowedIpAddressRangesPaginated, Error]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = UsersPaginated.from_dict(response.json())
+        response_200 = AllowedIpAddressRangesPaginated.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.BAD_REQUEST:
@@ -86,7 +80,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Error, UsersPaginated]]:
+) -> Response[Union[AllowedIpAddressRangesPaginated, Error]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -99,36 +93,30 @@ def sync_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Response[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]] = UNSET,
+) -> Response[Union[AllowedIpAddressRangesPaginated, Error]]:
+    """List allowed IP address ranges
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List allowed IP address ranges.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, UsersPaginated]]
+        Response[Union[AllowedIpAddressRangesPaginated, Error]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        workspace_id=workspace_id,
-        deployment_id=deployment_id,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -145,37 +133,31 @@ def sync(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Optional[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]] = UNSET,
+) -> Optional[Union[AllowedIpAddressRangesPaginated, Error]]:
+    """List allowed IP address ranges
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List allowed IP address ranges.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, UsersPaginated]
+        Union[AllowedIpAddressRangesPaginated, Error]
     """
 
     return sync_detailed(
         organization_id=organization_id,
         client=client,
-        workspace_id=workspace_id,
-        deployment_id=deployment_id,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -186,36 +168,30 @@ async def asyncio_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Response[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]] = UNSET,
+) -> Response[Union[AllowedIpAddressRangesPaginated, Error]]:
+    """List allowed IP address ranges
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List allowed IP address ranges.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, UsersPaginated]]
+        Response[Union[AllowedIpAddressRangesPaginated, Error]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        workspace_id=workspace_id,
-        deployment_id=deployment_id,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -230,38 +206,32 @@ async def asyncio(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Optional[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]] = UNSET,
+) -> Optional[Union[AllowedIpAddressRangesPaginated, Error]]:
+    """List allowed IP address ranges
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List allowed IP address ranges.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListAllowedIpAddressRangesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, UsersPaginated]
+        Union[AllowedIpAddressRangesPaginated, Error]
     """
 
     return (
         await asyncio_detailed(
             organization_id=organization_id,
             client=client,
-            workspace_id=workspace_id,
-            deployment_id=deployment_id,
             offset=offset,
             limit=limit,
             sorts=sorts,

@@ -4,7 +4,6 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.api_token_role_entity_type import ApiTokenRoleEntityType
-from ..models.api_token_role_role import ApiTokenRoleRole
 
 T = TypeVar("T", bound="ApiTokenRole")
 
@@ -17,19 +16,19 @@ class ApiTokenRole:
             tokens, this is the Workspace ID. Example: clm8sgvai000008l794psbkdv.
         entity_type (ApiTokenRoleEntityType): The type of the entity to which the API token is scoped for. Example:
             WORKSPACE.
-        role (ApiTokenRoleRole): The role of the API token. Example: WORKSPACE_MEMBER.
+        role (str): The role of the API token. Example: WORKSPACE_MEMBER.
     """
 
     entity_id: str
     entity_type: ApiTokenRoleEntityType
-    role: ApiTokenRoleRole
+    role: str
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         entity_id = self.entity_id
         entity_type = self.entity_type.value
 
-        role = self.role.value
+        role = self.role
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -50,7 +49,7 @@ class ApiTokenRole:
 
         entity_type = ApiTokenRoleEntityType(d.pop("entityType"))
 
-        role = ApiTokenRoleRole(d.pop("role"))
+        role = d.pop("role")
 
         api_token_role = cls(
             entity_id=entity_id,

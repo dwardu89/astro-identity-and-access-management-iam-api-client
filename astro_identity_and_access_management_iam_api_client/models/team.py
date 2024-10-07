@@ -10,6 +10,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.basic_subject_profile import BasicSubjectProfile
+    from ..models.deployment_role import DeploymentRole
     from ..models.workspace_role import WorkspaceRole
 
 
@@ -30,6 +31,7 @@ class Team:
         updated_at (datetime.datetime): The time when the Team was last updated in UTC, formatted as `YYYY-MM-
             DDTHH:MM:SSZ`. Example: 2022-11-22T04:37:12Z.
         created_by (Union[Unset, BasicSubjectProfile]):
+        deployment_roles (Union[Unset, List['DeploymentRole']]): The Team's role in each Deployment it belongs to.
         description (Union[Unset, str]): The Team's description. Example: My Team description.
         roles_count (Union[Unset, int]): The number of roles the Team has. Example: 1.
         updated_by (Union[Unset, BasicSubjectProfile]):
@@ -44,6 +46,7 @@ class Team:
     organization_role: TeamOrganizationRole
     updated_at: datetime.datetime
     created_by: Union[Unset, "BasicSubjectProfile"] = UNSET
+    deployment_roles: Union[Unset, List["DeploymentRole"]] = UNSET
     description: Union[Unset, str] = UNSET
     roles_count: Union[Unset, int] = UNSET
     updated_by: Union[Unset, "BasicSubjectProfile"] = UNSET
@@ -64,6 +67,14 @@ class Team:
         created_by: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.created_by, Unset):
             created_by = self.created_by.to_dict()
+
+        deployment_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.deployment_roles, Unset):
+            deployment_roles = []
+            for deployment_roles_item_data in self.deployment_roles:
+                deployment_roles_item = deployment_roles_item_data.to_dict()
+
+                deployment_roles.append(deployment_roles_item)
 
         description = self.description
         roles_count = self.roles_count
@@ -94,6 +105,8 @@ class Team:
         )
         if created_by is not UNSET:
             field_dict["createdBy"] = created_by
+        if deployment_roles is not UNSET:
+            field_dict["deploymentRoles"] = deployment_roles
         if description is not UNSET:
             field_dict["description"] = description
         if roles_count is not UNSET:
@@ -108,6 +121,7 @@ class Team:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.basic_subject_profile import BasicSubjectProfile
+        from ..models.deployment_role import DeploymentRole
         from ..models.workspace_role import WorkspaceRole
 
         d = src_dict.copy()
@@ -131,6 +145,13 @@ class Team:
             created_by = UNSET
         else:
             created_by = BasicSubjectProfile.from_dict(_created_by)
+
+        deployment_roles = []
+        _deployment_roles = d.pop("deploymentRoles", UNSET)
+        for deployment_roles_item_data in _deployment_roles or []:
+            deployment_roles_item = DeploymentRole.from_dict(deployment_roles_item_data)
+
+            deployment_roles.append(deployment_roles_item)
 
         description = d.pop("description", UNSET)
 
@@ -159,6 +180,7 @@ class Team:
             organization_role=organization_role,
             updated_at=updated_at,
             created_by=created_by,
+            deployment_roles=deployment_roles,
             description=description,
             roles_count=roles_count,
             updated_by=updated_by,

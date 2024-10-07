@@ -6,53 +6,37 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error import Error
-from ...models.list_teams_sorts_item import ListTeamsSortsItem
-from ...models.teams_paginated import TeamsPaginated
+from ...models.list_role_templates_scope_types_item import ListRoleTemplatesScopeTypesItem
+from ...models.role_template import RoleTemplate
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     organization_id: str,
     *,
-    names: Union[Unset, None, List[str]] = UNSET,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamsSortsItem]] = UNSET,
+    scope_types: Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
     params: Dict[str, Any] = {}
-    json_names: Union[Unset, None, List[str]] = UNSET
-    if not isinstance(names, Unset):
-        if names is None:
-            json_names = None
+    json_scope_types: Union[Unset, None, List[str]] = UNSET
+    if not isinstance(scope_types, Unset):
+        if scope_types is None:
+            json_scope_types = None
         else:
-            json_names = names
+            json_scope_types = []
+            for scope_types_item_data in scope_types:
+                scope_types_item = scope_types_item_data.value
 
-    params["names"] = json_names
+                json_scope_types.append(scope_types_item)
 
-    params["offset"] = offset
-
-    params["limit"] = limit
-
-    json_sorts: Union[Unset, None, List[str]] = UNSET
-    if not isinstance(sorts, Unset):
-        if sorts is None:
-            json_sorts = None
-        else:
-            json_sorts = []
-            for sorts_item_data in sorts:
-                sorts_item = sorts_item_data.value
-
-                json_sorts.append(sorts_item)
-
-    params["sorts"] = json_sorts
+    params["scopeTypes"] = json_scope_types
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
         "method": "get",
-        "url": "/organizations/{organizationId}/teams".format(
+        "url": "/organizations/{organizationId}/role-templates".format(
             organizationId=organization_id,
         ),
         "params": params,
@@ -61,9 +45,14 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Error, TeamsPaginated]]:
+) -> Optional[Union[Error, List["RoleTemplate"]]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = TeamsPaginated.from_dict(response.json())
+        response_200 = []
+        _response_200 = response.json()
+        for response_200_item_data in _response_200:
+            response_200_item = RoleTemplate.from_dict(response_200_item_data)
+
+            response_200.append(response_200_item)
 
         return response_200
     if response.status_code == HTTPStatus.BAD_REQUEST:
@@ -94,7 +83,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Error, TeamsPaginated]]:
+) -> Response[Union[Error, List["RoleTemplate"]]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -107,36 +96,28 @@ def sync_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    names: Union[Unset, None, List[str]] = UNSET,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamsSortsItem]] = UNSET,
-) -> Response[Union[Error, TeamsPaginated]]:
-    """List Teams
+    scope_types: Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]] = UNSET,
+) -> Response[Union[Error, List["RoleTemplate"]]]:
+    """Get role templates
 
-     List all Teams in an Organization.
+     Get a list of available role templates in an Organization. A role template can be used as the basis
+    for creating a new custom role.
 
     Args:
         organization_id (str):
-        names (Union[Unset, None, List[str]]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamsSortsItem]]):
+        scope_types (Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, TeamsPaginated]]
+        Response[Union[Error, List['RoleTemplate']]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        names=names,
-        offset=offset,
-        limit=limit,
-        sorts=sorts,
+        scope_types=scope_types,
     )
 
     response = client.get_httpx_client().request(
@@ -150,37 +131,29 @@ def sync(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    names: Union[Unset, None, List[str]] = UNSET,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamsSortsItem]] = UNSET,
-) -> Optional[Union[Error, TeamsPaginated]]:
-    """List Teams
+    scope_types: Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]] = UNSET,
+) -> Optional[Union[Error, List["RoleTemplate"]]]:
+    """Get role templates
 
-     List all Teams in an Organization.
+     Get a list of available role templates in an Organization. A role template can be used as the basis
+    for creating a new custom role.
 
     Args:
         organization_id (str):
-        names (Union[Unset, None, List[str]]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamsSortsItem]]):
+        scope_types (Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, TeamsPaginated]
+        Union[Error, List['RoleTemplate']]
     """
 
     return sync_detailed(
         organization_id=organization_id,
         client=client,
-        names=names,
-        offset=offset,
-        limit=limit,
-        sorts=sorts,
+        scope_types=scope_types,
     ).parsed
 
 
@@ -188,36 +161,28 @@ async def asyncio_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    names: Union[Unset, None, List[str]] = UNSET,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamsSortsItem]] = UNSET,
-) -> Response[Union[Error, TeamsPaginated]]:
-    """List Teams
+    scope_types: Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]] = UNSET,
+) -> Response[Union[Error, List["RoleTemplate"]]]:
+    """Get role templates
 
-     List all Teams in an Organization.
+     Get a list of available role templates in an Organization. A role template can be used as the basis
+    for creating a new custom role.
 
     Args:
         organization_id (str):
-        names (Union[Unset, None, List[str]]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamsSortsItem]]):
+        scope_types (Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, TeamsPaginated]]
+        Response[Union[Error, List['RoleTemplate']]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        names=names,
-        offset=offset,
-        limit=limit,
-        sorts=sorts,
+        scope_types=scope_types,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -229,37 +194,29 @@ async def asyncio(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    names: Union[Unset, None, List[str]] = UNSET,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamsSortsItem]] = UNSET,
-) -> Optional[Union[Error, TeamsPaginated]]:
-    """List Teams
+    scope_types: Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]] = UNSET,
+) -> Optional[Union[Error, List["RoleTemplate"]]]:
+    """Get role templates
 
-     List all Teams in an Organization.
+     Get a list of available role templates in an Organization. A role template can be used as the basis
+    for creating a new custom role.
 
     Args:
         organization_id (str):
-        names (Union[Unset, None, List[str]]):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamsSortsItem]]):
+        scope_types (Union[Unset, None, List[ListRoleTemplatesScopeTypesItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, TeamsPaginated]
+        Union[Error, List['RoleTemplate']]
     """
 
     return (
         await asyncio_detailed(
             organization_id=organization_id,
             client=client,
-            names=names,
-            offset=offset,
-            limit=limit,
-            sorts=sorts,
+            scope_types=scope_types,
         )
     ).parsed

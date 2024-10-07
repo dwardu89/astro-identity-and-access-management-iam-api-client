@@ -6,26 +6,38 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error import Error
-from ...models.list_users_sorts_item import ListUsersSortsItem
-from ...models.users_paginated import UsersPaginated
+from ...models.list_roles_scope_types_item import ListRolesScopeTypesItem
+from ...models.list_roles_sorts_item import ListRolesSortsItem
+from ...models.roles_paginated import RolesPaginated
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     organization_id: str,
     *,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
+    include_default_roles: Union[Unset, None, bool] = UNSET,
+    scope_types: Union[Unset, None, List[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
+    sorts: Union[Unset, None, List[ListRolesSortsItem]] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
     params: Dict[str, Any] = {}
-    params["workspaceId"] = workspace_id
+    params["includeDefaultRoles"] = include_default_roles
 
-    params["deploymentId"] = deployment_id
+    json_scope_types: Union[Unset, None, List[str]] = UNSET
+    if not isinstance(scope_types, Unset):
+        if scope_types is None:
+            json_scope_types = None
+        else:
+            json_scope_types = []
+            for scope_types_item_data in scope_types:
+                scope_types_item = scope_types_item_data.value
+
+                json_scope_types.append(scope_types_item)
+
+    params["scopeTypes"] = json_scope_types
 
     params["offset"] = offset
 
@@ -48,7 +60,7 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": "/organizations/{organizationId}/users".format(
+        "url": "/organizations/{organizationId}/roles".format(
             organizationId=organization_id,
         ),
         "params": params,
@@ -57,9 +69,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Error, UsersPaginated]]:
+) -> Optional[Union[Error, RolesPaginated]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = UsersPaginated.from_dict(response.json())
+        response_200 = RolesPaginated.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.BAD_REQUEST:
@@ -74,6 +86,10 @@ def _parse_response(
         response_403 = Error.from_dict(response.json())
 
         return response_403
+    if response.status_code == HTTPStatus.NOT_FOUND:
+        response_404 = Error.from_dict(response.json())
+
+        return response_404
     if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
         response_500 = Error.from_dict(response.json())
 
@@ -86,7 +102,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Error, UsersPaginated]]:
+) -> Response[Union[Error, RolesPaginated]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -99,36 +115,36 @@ def sync_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
+    include_default_roles: Union[Unset, None, bool] = UNSET,
+    scope_types: Union[Unset, None, List[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Response[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListRolesSortsItem]] = UNSET,
+) -> Response[Union[Error, RolesPaginated]]:
+    """List roles
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List available user roles in an Organization.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
+        include_default_roles (Union[Unset, None, bool]):
+        scope_types (Union[Unset, None, List[ListRolesScopeTypesItem]]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListRolesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, UsersPaginated]]
+        Response[Union[Error, RolesPaginated]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        workspace_id=workspace_id,
-        deployment_id=deployment_id,
+        include_default_roles=include_default_roles,
+        scope_types=scope_types,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -145,37 +161,37 @@ def sync(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
+    include_default_roles: Union[Unset, None, bool] = UNSET,
+    scope_types: Union[Unset, None, List[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Optional[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListRolesSortsItem]] = UNSET,
+) -> Optional[Union[Error, RolesPaginated]]:
+    """List roles
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List available user roles in an Organization.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
+        include_default_roles (Union[Unset, None, bool]):
+        scope_types (Union[Unset, None, List[ListRolesScopeTypesItem]]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListRolesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, UsersPaginated]
+        Union[Error, RolesPaginated]
     """
 
     return sync_detailed(
         organization_id=organization_id,
         client=client,
-        workspace_id=workspace_id,
-        deployment_id=deployment_id,
+        include_default_roles=include_default_roles,
+        scope_types=scope_types,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -186,36 +202,36 @@ async def asyncio_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
+    include_default_roles: Union[Unset, None, bool] = UNSET,
+    scope_types: Union[Unset, None, List[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Response[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListRolesSortsItem]] = UNSET,
+) -> Response[Union[Error, RolesPaginated]]:
+    """List roles
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List available user roles in an Organization.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
+        include_default_roles (Union[Unset, None, bool]):
+        scope_types (Union[Unset, None, List[ListRolesScopeTypesItem]]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListRolesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, UsersPaginated]]
+        Response[Union[Error, RolesPaginated]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        workspace_id=workspace_id,
-        deployment_id=deployment_id,
+        include_default_roles=include_default_roles,
+        scope_types=scope_types,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -230,38 +246,38 @@ async def asyncio(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    workspace_id: Union[Unset, None, str] = UNSET,
-    deployment_id: Union[Unset, None, str] = UNSET,
+    include_default_roles: Union[Unset, None, bool] = UNSET,
+    scope_types: Union[Unset, None, List[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, None, int] = 0,
     limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListUsersSortsItem]] = UNSET,
-) -> Optional[Union[Error, UsersPaginated]]:
-    """List users in an Organization
+    sorts: Union[Unset, None, List[ListRolesSortsItem]] = UNSET,
+) -> Optional[Union[Error, RolesPaginated]]:
+    """List roles
 
-     List users in an Organization or a specific Workspace within an Organization.
+     List available user roles in an Organization.
 
     Args:
         organization_id (str):
-        workspace_id (Union[Unset, None, str]):
-        deployment_id (Union[Unset, None, str]):
+        include_default_roles (Union[Unset, None, bool]):
+        scope_types (Union[Unset, None, List[ListRolesScopeTypesItem]]):
         offset (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListUsersSortsItem]]):
+        sorts (Union[Unset, None, List[ListRolesSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, UsersPaginated]
+        Union[Error, RolesPaginated]
     """
 
     return (
         await asyncio_detailed(
             organization_id=organization_id,
             client=client,
-            workspace_id=workspace_id,
-            deployment_id=deployment_id,
+            include_default_roles=include_default_roles,
+            scope_types=scope_types,
             offset=offset,
             limit=limit,
             sorts=sorts,

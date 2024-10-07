@@ -7,6 +7,7 @@ from ..models.update_user_roles_request_organization_role import UpdateUserRoles
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.deployment_role import DeploymentRole
     from ..models.workspace_role import WorkspaceRole
 
 
@@ -17,17 +18,28 @@ T = TypeVar("T", bound="UpdateUserRolesRequest")
 class UpdateUserRolesRequest:
     """
     Attributes:
+        deployment_roles (Union[Unset, List['DeploymentRole']]): The user's updated Deployment roles. Requires also
+            specifying an `OrganizationRole`.
         organization_role (Union[Unset, UpdateUserRolesRequestOrganizationRole]): The user's updated Organization role.
             Example: ORGANIZATION_MEMBER.
         workspace_roles (Union[Unset, List['WorkspaceRole']]): The user's updated Workspace roles. Requires also
             specifying an `OrganizationRole`.
     """
 
+    deployment_roles: Union[Unset, List["DeploymentRole"]] = UNSET
     organization_role: Union[Unset, UpdateUserRolesRequestOrganizationRole] = UNSET
     workspace_roles: Union[Unset, List["WorkspaceRole"]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        deployment_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.deployment_roles, Unset):
+            deployment_roles = []
+            for deployment_roles_item_data in self.deployment_roles:
+                deployment_roles_item = deployment_roles_item_data.to_dict()
+
+                deployment_roles.append(deployment_roles_item)
+
         organization_role: Union[Unset, str] = UNSET
         if not isinstance(self.organization_role, Unset):
             organization_role = self.organization_role.value
@@ -43,6 +55,8 @@ class UpdateUserRolesRequest:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if deployment_roles is not UNSET:
+            field_dict["deploymentRoles"] = deployment_roles
         if organization_role is not UNSET:
             field_dict["organizationRole"] = organization_role
         if workspace_roles is not UNSET:
@@ -52,9 +66,17 @@ class UpdateUserRolesRequest:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.deployment_role import DeploymentRole
         from ..models.workspace_role import WorkspaceRole
 
         d = src_dict.copy()
+        deployment_roles = []
+        _deployment_roles = d.pop("deploymentRoles", UNSET)
+        for deployment_roles_item_data in _deployment_roles or []:
+            deployment_roles_item = DeploymentRole.from_dict(deployment_roles_item_data)
+
+            deployment_roles.append(deployment_roles_item)
+
         _organization_role = d.pop("organizationRole", UNSET)
         organization_role: Union[Unset, UpdateUserRolesRequestOrganizationRole]
         if isinstance(_organization_role, Unset):
@@ -70,6 +92,7 @@ class UpdateUserRolesRequest:
             workspace_roles.append(workspace_roles_item)
 
         update_user_roles_request = cls(
+            deployment_roles=deployment_roles,
             organization_role=organization_role,
             workspace_roles=workspace_roles,
         )

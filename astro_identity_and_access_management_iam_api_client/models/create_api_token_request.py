@@ -3,7 +3,6 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.create_api_token_request_role import CreateApiTokenRequestRole
 from ..models.create_api_token_request_type import CreateApiTokenRequestType
 from ..types import UNSET, Unset
 
@@ -15,7 +14,7 @@ class CreateApiTokenRequest:
     """
     Attributes:
         name (str): The name of the API token. Example: My token.
-        role (CreateApiTokenRequestRole): The role of the API token. Example: WORKSPACE_OWNER.
+        role (str): The role of the API token. Example: WORKSPACE_OWNER.
         type (CreateApiTokenRequestType): The scope of the API token. Example: WORKSPACE.
         description (Union[Unset, str]): The description for the API token. Example: This is my API token.
         entity_id (Union[Unset, str]): The ID of the Workspace or Deployment to which the API token is scoped. It is
@@ -25,7 +24,7 @@ class CreateApiTokenRequest:
     """
 
     name: str
-    role: CreateApiTokenRequestRole
+    role: str
     type: CreateApiTokenRequestType
     description: Union[Unset, str] = UNSET
     entity_id: Union[Unset, str] = UNSET
@@ -34,8 +33,7 @@ class CreateApiTokenRequest:
 
     def to_dict(self) -> Dict[str, Any]:
         name = self.name
-        role = self.role.value
-
+        role = self.role
         type = self.type.value
 
         description = self.description
@@ -65,7 +63,7 @@ class CreateApiTokenRequest:
         d = src_dict.copy()
         name = d.pop("name")
 
-        role = CreateApiTokenRequestRole(d.pop("role"))
+        role = d.pop("role")
 
         type = CreateApiTokenRequestType(d.pop("type"))
 

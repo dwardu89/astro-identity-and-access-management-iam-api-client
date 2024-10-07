@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "astro-iam-api-client"
-version = "v1beta1"
+version = "v1beta1-1"
 description = "A client library for accessing Astro Identity and Access Management (IAM) API"
 
 authors = []

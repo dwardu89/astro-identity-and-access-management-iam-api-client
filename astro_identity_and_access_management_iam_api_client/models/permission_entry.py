@@ -3,31 +3,31 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="DeploymentRole")
+T = TypeVar("T", bound="PermissionEntry")
 
 
 @_attrs_define
-class DeploymentRole:
+class PermissionEntry:
     """
     Attributes:
-        deployment_id (str): The Deployment ID. Example: clm8t5u4q000008jq4qoc3031.
-        role (str): The name of the role for the subject in the Deployment. Example: DEPLOYMENT_ADMIN.
+        action (str): The permission's action. Example: get.
+        description (str): The permission's description. Example: Subject is permitted to get the scope..
     """
 
-    deployment_id: str
-    role: str
+    action: str
+    description: str
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        deployment_id = self.deployment_id
-        role = self.role
+        action = self.action
+        description = self.description
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "deploymentId": deployment_id,
-                "role": role,
+                "action": action,
+                "description": description,
             }
         )
 
@@ -36,17 +36,17 @@ class DeploymentRole:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        deployment_id = d.pop("deploymentId")
+        action = d.pop("action")
 
-        role = d.pop("role")
+        description = d.pop("description")
 
-        deployment_role = cls(
-            deployment_id=deployment_id,
-            role=role,
+        permission_entry = cls(
+            action=action,
+            description=description,
         )
 
-        deployment_role.additional_properties = d
-        return deployment_role
+        permission_entry.additional_properties = d
+        return permission_entry
 
     @property
     def additional_keys(self) -> List[str]:

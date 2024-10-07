@@ -3,31 +3,27 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="DeploymentRole")
+T = TypeVar("T", bound="CreateAllowedIpAddressRangeRequest")
 
 
 @_attrs_define
-class DeploymentRole:
+class CreateAllowedIpAddressRangeRequest:
     """
     Attributes:
-        deployment_id (str): The Deployment ID. Example: clm8t5u4q000008jq4qoc3031.
-        role (str): The name of the role for the subject in the Deployment. Example: DEPLOYMENT_ADMIN.
+        ip_address_range (str): The allowed IP address range in CIDR format. Example: 1.1.1.1/32.
     """
 
-    deployment_id: str
-    role: str
+    ip_address_range: str
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        deployment_id = self.deployment_id
-        role = self.role
+        ip_address_range = self.ip_address_range
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "deploymentId": deployment_id,
-                "role": role,
+                "ipAddressRange": ip_address_range,
             }
         )
 
@@ -36,17 +32,14 @@ class DeploymentRole:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        deployment_id = d.pop("deploymentId")
+        ip_address_range = d.pop("ipAddressRange")
 
-        role = d.pop("role")
-
-        deployment_role = cls(
-            deployment_id=deployment_id,
-            role=role,
+        create_allowed_ip_address_range_request = cls(
+            ip_address_range=ip_address_range,
         )
 
-        deployment_role.additional_properties = d
-        return deployment_role
+        create_allowed_ip_address_range_request.additional_properties = d
+        return create_allowed_ip_address_range_request
 
     @property
     def additional_keys(self) -> List[str]:

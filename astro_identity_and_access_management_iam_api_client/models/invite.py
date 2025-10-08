@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -34,20 +35,24 @@ class Invite:
     organization_id: str
     organization_name: Union[Unset, str] = UNSET
     user_id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         expires_at = self.expires_at
+
         invite_id = self.invite_id
+
         invitee = self.invitee.to_dict()
 
         inviter = self.inviter.to_dict()
 
         organization_id = self.organization_id
+
         organization_name = self.organization_name
+
         user_id = self.user_id
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -66,10 +71,10 @@ class Invite:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.basic_subject_profile import BasicSubjectProfile
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         expires_at = d.pop("expiresAt")
 
         invite_id = d.pop("inviteId")
@@ -98,7 +103,7 @@ class Invite:
         return invite
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

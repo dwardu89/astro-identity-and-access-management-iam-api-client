@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 import httpx
 
@@ -15,69 +15,69 @@ def _get_kwargs(
     organization_id: str,
     team_id: str,
     *,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamMembersSortsItem]] = UNSET,
-) -> Dict[str, Any]:
-    pass
+    offset: Union[Unset, int] = 0,
+    limit: Union[Unset, int] = 20,
+    sorts: Union[Unset, list[ListTeamMembersSortsItem]] = UNSET,
+) -> dict[str, Any]:
+    params: dict[str, Any] = {}
 
-    params: Dict[str, Any] = {}
     params["offset"] = offset
 
     params["limit"] = limit
 
-    json_sorts: Union[Unset, None, List[str]] = UNSET
+    json_sorts: Union[Unset, list[str]] = UNSET
     if not isinstance(sorts, Unset):
-        if sorts is None:
-            json_sorts = None
-        else:
-            json_sorts = []
-            for sorts_item_data in sorts:
-                sorts_item = sorts_item_data.value
-
-                json_sorts.append(sorts_item)
+        json_sorts = []
+        for sorts_item_data in sorts:
+            sorts_item = sorts_item_data.value
+            json_sorts.append(sorts_item)
 
     params["sorts"] = json_sorts
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/organizations/{organizationId}/teams/{teamId}/members".format(
-            organizationId=organization_id,
-            teamId=team_id,
-        ),
+        "url": f"/organizations/{organization_id}/teams/{team_id}/members",
         "params": params,
     }
+
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Error, TeamMembersPaginated]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = TeamMembersPaginated.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+
+    if response.status_code == 400:
         response_400 = Error.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+
+    if response.status_code == 401:
         response_401 = Error.from_dict(response.json())
 
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+
+    if response.status_code == 403:
         response_403 = Error.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+
+    if response.status_code == 404:
         response_404 = Error.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+
+    if response.status_code == 500:
         response_500 = Error.from_dict(response.json())
 
         return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -100,9 +100,9 @@ def sync_detailed(
     team_id: str,
     *,
     client: AuthenticatedClient,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamMembersSortsItem]] = UNSET,
+    offset: Union[Unset, int] = 0,
+    limit: Union[Unset, int] = 20,
+    sorts: Union[Unset, list[ListTeamMembersSortsItem]] = UNSET,
 ) -> Response[Union[Error, TeamMembersPaginated]]:
     """List Team members
 
@@ -111,9 +111,9 @@ def sync_detailed(
     Args:
         organization_id (str):
         team_id (str):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamMembersSortsItem]]):
+        offset (Union[Unset, int]):  Default: 0.
+        limit (Union[Unset, int]):  Default: 20.
+        sorts (Union[Unset, list[ListTeamMembersSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,9 +143,9 @@ def sync(
     team_id: str,
     *,
     client: AuthenticatedClient,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamMembersSortsItem]] = UNSET,
+    offset: Union[Unset, int] = 0,
+    limit: Union[Unset, int] = 20,
+    sorts: Union[Unset, list[ListTeamMembersSortsItem]] = UNSET,
 ) -> Optional[Union[Error, TeamMembersPaginated]]:
     """List Team members
 
@@ -154,9 +154,9 @@ def sync(
     Args:
         organization_id (str):
         team_id (str):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamMembersSortsItem]]):
+        offset (Union[Unset, int]):  Default: 0.
+        limit (Union[Unset, int]):  Default: 20.
+        sorts (Union[Unset, list[ListTeamMembersSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -181,9 +181,9 @@ async def asyncio_detailed(
     team_id: str,
     *,
     client: AuthenticatedClient,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamMembersSortsItem]] = UNSET,
+    offset: Union[Unset, int] = 0,
+    limit: Union[Unset, int] = 20,
+    sorts: Union[Unset, list[ListTeamMembersSortsItem]] = UNSET,
 ) -> Response[Union[Error, TeamMembersPaginated]]:
     """List Team members
 
@@ -192,9 +192,9 @@ async def asyncio_detailed(
     Args:
         organization_id (str):
         team_id (str):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamMembersSortsItem]]):
+        offset (Union[Unset, int]):  Default: 0.
+        limit (Union[Unset, int]):  Default: 20.
+        sorts (Union[Unset, list[ListTeamMembersSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -222,9 +222,9 @@ async def asyncio(
     team_id: str,
     *,
     client: AuthenticatedClient,
-    offset: Union[Unset, None, int] = 0,
-    limit: Union[Unset, None, int] = 20,
-    sorts: Union[Unset, None, List[ListTeamMembersSortsItem]] = UNSET,
+    offset: Union[Unset, int] = 0,
+    limit: Union[Unset, int] = 20,
+    sorts: Union[Unset, list[ListTeamMembersSortsItem]] = UNSET,
 ) -> Optional[Union[Error, TeamMembersPaginated]]:
     """List Team members
 
@@ -233,9 +233,9 @@ async def asyncio(
     Args:
         organization_id (str):
         team_id (str):
-        offset (Union[Unset, None, int]):
-        limit (Union[Unset, None, int]):  Default: 20.
-        sorts (Union[Unset, None, List[ListTeamMembersSortsItem]]):
+        offset (Union[Unset, int]):  Default: 0.
+        limit (Union[Unset, int]):  Default: 20.
+        sorts (Union[Unset, list[ListTeamMembersSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

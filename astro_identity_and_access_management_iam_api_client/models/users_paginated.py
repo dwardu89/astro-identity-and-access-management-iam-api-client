@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,26 +18,28 @@ class UsersPaginated:
         limit (int): The maximum number of users in one page. Example: 10.
         offset (int): The offset of the current page of users.
         total_count (int): The total number of users. Example: 100.
-        users (List['User']): The list of users in the current page.
+        users (list['User']): The list of users in the current page.
     """
 
     limit: int
     offset: int
     total_count: int
-    users: List["User"]
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    users: list["User"]
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         limit = self.limit
+
         offset = self.offset
+
         total_count = self.total_count
+
         users = []
         for users_item_data in self.users:
             users_item = users_item_data.to_dict()
-
             users.append(users_item)
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -50,10 +53,10 @@ class UsersPaginated:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.user import User
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         limit = d.pop("limit")
 
         offset = d.pop("offset")
@@ -78,7 +81,7 @@ class UsersPaginated:
         return users_paginated
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

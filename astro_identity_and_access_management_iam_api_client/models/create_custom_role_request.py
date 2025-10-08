@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from collections.abc import Mapping
+from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -14,32 +15,34 @@ class CreateCustomRoleRequest:
     """
     Attributes:
         name (str): The role's name. Example: Deployment_Viewer.
-        permissions (List[str]): The permissions included in the role. Example: ['deployment.get'].
+        permissions (list[str]): The permissions included in the role. Example: ['deployment.get'].
         scope_type (CreateCustomRoleRequestScopeType): The scope of the role. Example: DEPLOYMENT.
         description (Union[Unset, str]): The role's description. Example: Subject can only view deployments..
-        restricted_workspace_ids (Union[Unset, List[str]]): The IDs of the Workspaces that the role is restricted to.
+        restricted_workspace_ids (Union[Unset, list[str]]): The IDs of the Workspaces that the role is restricted to.
             Example: ['cldbvzoi20182g8odxt8ehi5i'].
     """
 
     name: str
-    permissions: List[str]
+    permissions: list[str]
     scope_type: CreateCustomRoleRequestScopeType
     description: Union[Unset, str] = UNSET
-    restricted_workspace_ids: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    restricted_workspace_ids: Union[Unset, list[str]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         name = self.name
+
         permissions = self.permissions
 
         scope_type = self.scope_type.value
 
         description = self.description
-        restricted_workspace_ids: Union[Unset, List[str]] = UNSET
+
+        restricted_workspace_ids: Union[Unset, list[str]] = UNSET
         if not isinstance(self.restricted_workspace_ids, Unset):
             restricted_workspace_ids = self.restricted_workspace_ids
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -56,17 +59,17 @@ class CreateCustomRoleRequest:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         name = d.pop("name")
 
-        permissions = cast(List[str], d.pop("permissions"))
+        permissions = cast(list[str], d.pop("permissions"))
 
         scope_type = CreateCustomRoleRequestScopeType(d.pop("scopeType"))
 
         description = d.pop("description", UNSET)
 
-        restricted_workspace_ids = cast(List[str], d.pop("restrictedWorkspaceIds", UNSET))
+        restricted_workspace_ids = cast(list[str], d.pop("restrictedWorkspaceIds", UNSET))
 
         create_custom_role_request = cls(
             name=name,
@@ -80,7 +83,7 @@ class CreateCustomRoleRequest:
         return create_custom_role_request
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

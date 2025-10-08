@@ -1,4 +1,4 @@
-""" Contains all the data models used in inputs/outputs """
+"""Contains all the data models used in inputs/outputs"""
 
 from .add_team_members_request import AddTeamMembersRequest
 from .allowed_ip_address_range import AllowedIpAddressRange
@@ -10,6 +10,7 @@ from .api_token_type import ApiTokenType
 from .api_tokens_paginated import ApiTokensPaginated
 from .basic_subject_profile import BasicSubjectProfile
 from .basic_subject_profile_subject_type import BasicSubjectProfileSubjectType
+from .create_agent_token_request import CreateAgentTokenRequest
 from .create_allowed_ip_address_range_request import CreateAllowedIpAddressRangeRequest
 from .create_api_token_request import CreateApiTokenRequest
 from .create_api_token_request_type import CreateApiTokenRequestType
@@ -24,6 +25,7 @@ from .default_role_scope_type import DefaultRoleScopeType
 from .deployment_role import DeploymentRole
 from .error import Error
 from .invite import Invite
+from .list_agent_tokens_sorts_item import ListAgentTokensSortsItem
 from .list_allowed_ip_address_ranges_sorts_item import ListAllowedIpAddressRangesSortsItem
 from .list_api_tokens_sorts_item import ListApiTokensSortsItem
 from .list_permission_groups_scope_type import ListPermissionGroupsScopeType
@@ -75,6 +77,7 @@ __all__ = (
     "ApiTokenType",
     "BasicSubjectProfile",
     "BasicSubjectProfileSubjectType",
+    "CreateAgentTokenRequest",
     "CreateAllowedIpAddressRangeRequest",
     "CreateApiTokenRequest",
     "CreateApiTokenRequestType",
@@ -89,6 +92,7 @@ __all__ = (
     "DeploymentRole",
     "Error",
     "Invite",
+    "ListAgentTokensSortsItem",
     "ListAllowedIpAddressRangesSortsItem",
     "ListApiTokensSortsItem",
     "ListPermissionGroupsScopeType",

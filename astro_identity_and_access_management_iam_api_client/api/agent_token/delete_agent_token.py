@@ -1,22 +1,22 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, cast
 
 import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error import Error
-from ...models.team import Team
 from ...types import Response
 
 
 def _get_kwargs(
     organization_id: str,
-    team_id: str,
+    deployment_id: str,
+    agent_token_id: str,
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
-        "method": "get",
-        "url": f"/organizations/{organization_id}/teams/{team_id}",
+        "method": "delete",
+        "url": f"/organizations/{organization_id}/deployments/{deployment_id}/agent-tokens/{agent_token_id}",
     }
 
     return _kwargs
@@ -24,11 +24,10 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Error, Team]]:
-    if response.status_code == 200:
-        response_200 = Team.from_dict(response.json())
-
-        return response_200
+) -> Optional[Union[Any, Error]]:
+    if response.status_code == 204:
+        response_204 = cast(Any, None)
+        return response_204
 
     if response.status_code == 400:
         response_400 = Error.from_dict(response.json())
@@ -63,7 +62,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Error, Team]]:
+) -> Response[Union[Any, Error]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -74,29 +73,32 @@ def _build_response(
 
 def sync_detailed(
     organization_id: str,
-    team_id: str,
+    deployment_id: str,
+    agent_token_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Error, Team]]:
-    """Get a Team
+) -> Response[Union[Any, Error]]:
+    """Delete an Agent API Token
 
-     Retrieve details about a specific Team.
+     Delete an Agent API Token.
 
     Args:
         organization_id (str):
-        team_id (str):
+        deployment_id (str):
+        agent_token_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, Team]]
+        Response[Union[Any, Error]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        team_id=team_id,
+        deployment_id=deployment_id,
+        agent_token_id=agent_token_id,
     )
 
     response = client.get_httpx_client().request(
@@ -108,58 +110,64 @@ def sync_detailed(
 
 def sync(
     organization_id: str,
-    team_id: str,
+    deployment_id: str,
+    agent_token_id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Error, Team]]:
-    """Get a Team
+) -> Optional[Union[Any, Error]]:
+    """Delete an Agent API Token
 
-     Retrieve details about a specific Team.
+     Delete an Agent API Token.
 
     Args:
         organization_id (str):
-        team_id (str):
+        deployment_id (str):
+        agent_token_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, Team]
+        Union[Any, Error]
     """
 
     return sync_detailed(
         organization_id=organization_id,
-        team_id=team_id,
+        deployment_id=deployment_id,
+        agent_token_id=agent_token_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
     organization_id: str,
-    team_id: str,
+    deployment_id: str,
+    agent_token_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Error, Team]]:
-    """Get a Team
+) -> Response[Union[Any, Error]]:
+    """Delete an Agent API Token
 
-     Retrieve details about a specific Team.
+     Delete an Agent API Token.
 
     Args:
         organization_id (str):
-        team_id (str):
+        deployment_id (str):
+        agent_token_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, Team]]
+        Response[Union[Any, Error]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        team_id=team_id,
+        deployment_id=deployment_id,
+        agent_token_id=agent_token_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -169,30 +177,33 @@ async def asyncio_detailed(
 
 async def asyncio(
     organization_id: str,
-    team_id: str,
+    deployment_id: str,
+    agent_token_id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Error, Team]]:
-    """Get a Team
+) -> Optional[Union[Any, Error]]:
+    """Delete an Agent API Token
 
-     Retrieve details about a specific Team.
+     Delete an Agent API Token.
 
     Args:
         organization_id (str):
-        team_id (str):
+        deployment_id (str):
+        agent_token_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, Team]
+        Union[Any, Error]
     """
 
     return (
         await asyncio_detailed(
             organization_id=organization_id,
-            team_id=team_id,
+            deployment_id=deployment_id,
+            agent_token_id=agent_token_id,
             client=client,
         )
     ).parsed

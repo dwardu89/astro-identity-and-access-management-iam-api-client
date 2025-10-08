@@ -1,5 +1,6 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -31,11 +32,11 @@ class Team:
         updated_at (datetime.datetime): The time when the Team was last updated in UTC, formatted as `YYYY-MM-
             DDTHH:MM:SSZ`. Example: 2022-11-22T04:37:12Z.
         created_by (Union[Unset, BasicSubjectProfile]):
-        deployment_roles (Union[Unset, List['DeploymentRole']]): The Team's role in each Deployment it belongs to.
+        deployment_roles (Union[Unset, list['DeploymentRole']]): The Team's role in each Deployment it belongs to.
         description (Union[Unset, str]): The Team's description. Example: My Team description.
         roles_count (Union[Unset, int]): The number of roles the Team has. Example: 1.
         updated_by (Union[Unset, BasicSubjectProfile]):
-        workspace_roles (Union[Unset, List['WorkspaceRole']]): The Team's role in each Workspace it belongs to.
+        workspace_roles (Union[Unset, list['WorkspaceRole']]): The Team's role in each Workspace it belongs to.
     """
 
     created_at: datetime.datetime
@@ -46,51 +47,55 @@ class Team:
     organization_role: TeamOrganizationRole
     updated_at: datetime.datetime
     created_by: Union[Unset, "BasicSubjectProfile"] = UNSET
-    deployment_roles: Union[Unset, List["DeploymentRole"]] = UNSET
+    deployment_roles: Union[Unset, list["DeploymentRole"]] = UNSET
     description: Union[Unset, str] = UNSET
     roles_count: Union[Unset, int] = UNSET
     updated_by: Union[Unset, "BasicSubjectProfile"] = UNSET
-    workspace_roles: Union[Unset, List["WorkspaceRole"]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    workspace_roles: Union[Unset, list["WorkspaceRole"]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         created_at = self.created_at.isoformat()
 
         id = self.id
+
         is_idp_managed = self.is_idp_managed
+
         name = self.name
+
         organization_id = self.organization_id
+
         organization_role = self.organization_role.value
 
         updated_at = self.updated_at.isoformat()
 
-        created_by: Union[Unset, Dict[str, Any]] = UNSET
+        created_by: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.created_by, Unset):
             created_by = self.created_by.to_dict()
 
-        deployment_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+        deployment_roles: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.deployment_roles, Unset):
             deployment_roles = []
             for deployment_roles_item_data in self.deployment_roles:
                 deployment_roles_item = deployment_roles_item_data.to_dict()
-
                 deployment_roles.append(deployment_roles_item)
 
         description = self.description
+
         roles_count = self.roles_count
-        updated_by: Union[Unset, Dict[str, Any]] = UNSET
+
+        updated_by: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.updated_by, Unset):
             updated_by = self.updated_by.to_dict()
 
-        workspace_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+        workspace_roles: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.workspace_roles, Unset):
             workspace_roles = []
             for workspace_roles_item_data in self.workspace_roles:
                 workspace_roles_item = workspace_roles_item_data.to_dict()
-
                 workspace_roles.append(workspace_roles_item)
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -119,12 +124,12 @@ class Team:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.basic_subject_profile import BasicSubjectProfile
         from ..models.deployment_role import DeploymentRole
         from ..models.workspace_role import WorkspaceRole
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         created_at = isoparse(d.pop("createdAt"))
 
         id = d.pop("id")
@@ -191,7 +196,7 @@ class Team:
         return team
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

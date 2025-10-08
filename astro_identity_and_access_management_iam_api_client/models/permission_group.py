@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,28 +18,29 @@ class PermissionGroup:
         description (str): The permission group's description. Example: Astro notification channel defines where alert
             messages can be sent. For example, alert messages issued via email or slack..
         name (str): The permission group's name. Example: workspace.notificationChannels.
-        permissions (List['PermissionEntry']): The permission group's permissions.
+        permissions (list['PermissionEntry']): The permission group's permissions.
         scope (str): The permission group's scope. Example: Workspace NotificationChannels.
     """
 
     description: str
     name: str
-    permissions: List["PermissionEntry"]
+    permissions: list["PermissionEntry"]
     scope: str
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         description = self.description
+
         name = self.name
+
         permissions = []
         for permissions_item_data in self.permissions:
             permissions_item = permissions_item_data.to_dict()
-
             permissions.append(permissions_item)
 
         scope = self.scope
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -52,10 +54,10 @@ class PermissionGroup:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.permission_entry import PermissionEntry
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         description = d.pop("description")
 
         name = d.pop("name")
@@ -80,7 +82,7 @@ class PermissionGroup:
         return permission_group
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

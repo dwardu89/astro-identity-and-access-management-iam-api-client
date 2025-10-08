@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 
 import httpx
 
@@ -14,48 +14,56 @@ from ...types import Response
 def _get_kwargs(
     organization_id: str,
     *,
-    json_body: CreateUserInviteRequest,
-) -> Dict[str, Any]:
-    pass
+    body: CreateUserInviteRequest,
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
 
-    json_json_body = json_body.to_dict()
-
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/organizations/{organizationId}/invites".format(
-            organizationId=organization_id,
-        ),
-        "json": json_json_body,
+        "url": f"/organizations/{organization_id}/invites",
     }
+
+    _kwargs["json"] = body.to_dict()
+
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Error, Invite]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = Invite.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+
+    if response.status_code == 400:
         response_400 = Error.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+
+    if response.status_code == 401:
         response_401 = Error.from_dict(response.json())
 
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+
+    if response.status_code == 403:
         response_403 = Error.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+
+    if response.status_code == 404:
         response_404 = Error.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+
+    if response.status_code == 500:
         response_500 = Error.from_dict(response.json())
 
         return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -77,7 +85,7 @@ def sync_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: CreateUserInviteRequest,
+    body: CreateUserInviteRequest,
 ) -> Response[Union[Error, Invite]]:
     """Create a user invitation
 
@@ -85,7 +93,7 @@ def sync_detailed(
 
     Args:
         organization_id (str):
-        json_body (CreateUserInviteRequest):
+        body (CreateUserInviteRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -97,7 +105,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        json_body=json_body,
+        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -111,7 +119,7 @@ def sync(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: CreateUserInviteRequest,
+    body: CreateUserInviteRequest,
 ) -> Optional[Union[Error, Invite]]:
     """Create a user invitation
 
@@ -119,7 +127,7 @@ def sync(
 
     Args:
         organization_id (str):
-        json_body (CreateUserInviteRequest):
+        body (CreateUserInviteRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -132,7 +140,7 @@ def sync(
     return sync_detailed(
         organization_id=organization_id,
         client=client,
-        json_body=json_body,
+        body=body,
     ).parsed
 
 
@@ -140,7 +148,7 @@ async def asyncio_detailed(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: CreateUserInviteRequest,
+    body: CreateUserInviteRequest,
 ) -> Response[Union[Error, Invite]]:
     """Create a user invitation
 
@@ -148,7 +156,7 @@ async def asyncio_detailed(
 
     Args:
         organization_id (str):
-        json_body (CreateUserInviteRequest):
+        body (CreateUserInviteRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -160,7 +168,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        json_body=json_body,
+        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -172,7 +180,7 @@ async def asyncio(
     organization_id: str,
     *,
     client: AuthenticatedClient,
-    json_body: CreateUserInviteRequest,
+    body: CreateUserInviteRequest,
 ) -> Optional[Union[Error, Invite]]:
     """Create a user invitation
 
@@ -180,7 +188,7 @@ async def asyncio(
 
     Args:
         organization_id (str):
-        json_body (CreateUserInviteRequest):
+        body (CreateUserInviteRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -194,6 +202,6 @@ async def asyncio(
         await asyncio_detailed(
             organization_id=organization_id,
             client=client,
-            json_body=json_body,
+            body=body,
         )
     ).parsed

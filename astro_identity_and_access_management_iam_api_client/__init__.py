@@ -1,4 +1,5 @@
-""" A client library for accessing Astro Identity and Access Management (IAM) API """
+"""A client library for accessing Astro Identity and Access Management (IAM) API"""
+
 from .client import AuthenticatedClient, Client
 
 __all__ = (

@@ -1,5 +1,6 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -36,25 +37,28 @@ class AllowedIpAddressRange:
     updated_at: datetime.datetime
     created_by: Union[Unset, "BasicSubjectProfile"] = UNSET
     updated_by: Union[Unset, "BasicSubjectProfile"] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         created_at = self.created_at.isoformat()
 
         id = self.id
+
         ip_address_range = self.ip_address_range
+
         organization_id = self.organization_id
+
         updated_at = self.updated_at.isoformat()
 
-        created_by: Union[Unset, Dict[str, Any]] = UNSET
+        created_by: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.created_by, Unset):
             created_by = self.created_by.to_dict()
 
-        updated_by: Union[Unset, Dict[str, Any]] = UNSET
+        updated_by: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.updated_by, Unset):
             updated_by = self.updated_by.to_dict()
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -73,10 +77,10 @@ class AllowedIpAddressRange:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.basic_subject_profile import BasicSubjectProfile
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         created_at = isoparse(d.pop("createdAt"))
 
         id = d.pop("id")
@@ -115,7 +119,7 @@ class AllowedIpAddressRange:
         return allowed_ip_address_range
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

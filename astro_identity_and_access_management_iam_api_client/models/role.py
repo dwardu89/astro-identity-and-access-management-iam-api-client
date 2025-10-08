@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,7 +22,7 @@ class Role:
         created_by (BasicSubjectProfile):
         id (str): The role's ID. Example: cluc9tapx000901qn2xrgqdmn.
         name (str): The role's name. Example: Deployment_Viewer.
-        restricted_workspace_ids (List[str]): The IDs of Workspaces that the role is restricted to. Example:
+        restricted_workspace_ids (list[str]): The IDs of Workspaces that the role is restricted to. Example:
             ['cldbvzoi20182g8odxt8ehi5i'].
         scope_type (RoleScopeType): The role's scope. Example: DEPLOYMENT.
         updated_at (str): The time the role was last updated.
@@ -33,29 +34,33 @@ class Role:
     created_by: "BasicSubjectProfile"
     id: str
     name: str
-    restricted_workspace_ids: List[str]
+    restricted_workspace_ids: list[str]
     scope_type: RoleScopeType
     updated_at: str
     updated_by: "BasicSubjectProfile"
     description: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         created_at = self.created_at
+
         created_by = self.created_by.to_dict()
 
         id = self.id
+
         name = self.name
+
         restricted_workspace_ids = self.restricted_workspace_ids
 
         scope_type = self.scope_type.value
 
         updated_at = self.updated_at
+
         updated_by = self.updated_by.to_dict()
 
         description = self.description
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -75,10 +80,10 @@ class Role:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.basic_subject_profile import BasicSubjectProfile
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         created_at = d.pop("createdAt")
 
         created_by = BasicSubjectProfile.from_dict(d.pop("createdBy"))
@@ -87,7 +92,7 @@ class Role:
 
         name = d.pop("name")
 
-        restricted_workspace_ids = cast(List[str], d.pop("restrictedWorkspaceIds"))
+        restricted_workspace_ids = cast(list[str], d.pop("restrictedWorkspaceIds"))
 
         scope_type = RoleScopeType(d.pop("scopeType"))
 
@@ -113,7 +118,7 @@ class Role:
         return role
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

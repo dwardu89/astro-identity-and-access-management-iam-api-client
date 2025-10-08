@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,28 +17,29 @@ class TeamMembersPaginated:
     Attributes:
         limit (int): The maximum number of Team members in one page. Example: 10.
         offset (int): The offset of the current page of Team members.
-        team_members (List['TeamMember']): The list of Team members in the current page.
+        team_members (list['TeamMember']): The list of Team members in the current page.
         total_count (int): The total number of Team members. Example: 100.
     """
 
     limit: int
     offset: int
-    team_members: List["TeamMember"]
+    team_members: list["TeamMember"]
     total_count: int
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         limit = self.limit
+
         offset = self.offset
+
         team_members = []
         for team_members_item_data in self.team_members:
             team_members_item = team_members_item_data.to_dict()
-
             team_members.append(team_members_item)
 
         total_count = self.total_count
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -51,10 +53,10 @@ class TeamMembersPaginated:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.team_member import TeamMember
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         limit = d.pop("limit")
 
         offset = d.pop("offset")
@@ -79,7 +81,7 @@ class TeamMembersPaginated:
         return team_members_paginated
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

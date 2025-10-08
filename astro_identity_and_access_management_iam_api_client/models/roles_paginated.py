@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,37 +20,38 @@ class RolesPaginated:
     Attributes:
         limit (int): The number of custom roles returned. Example: 1.
         offset (int): The offset of the custom roles. Example: 1.
-        roles (List['Role']): The list of custom roles.
+        roles (list['Role']): The list of custom roles.
         total_count (int): The total number of custom roles. Example: 1.
-        default_roles (Union[Unset, List['DefaultRole']]): The list of default roles.
+        default_roles (Union[Unset, list['DefaultRole']]): The list of default roles.
     """
 
     limit: int
     offset: int
-    roles: List["Role"]
+    roles: list["Role"]
     total_count: int
-    default_roles: Union[Unset, List["DefaultRole"]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    default_roles: Union[Unset, list["DefaultRole"]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         limit = self.limit
+
         offset = self.offset
+
         roles = []
         for roles_item_data in self.roles:
             roles_item = roles_item_data.to_dict()
-
             roles.append(roles_item)
 
         total_count = self.total_count
-        default_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+
+        default_roles: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.default_roles, Unset):
             default_roles = []
             for default_roles_item_data in self.default_roles:
                 default_roles_item = default_roles_item_data.to_dict()
-
                 default_roles.append(default_roles_item)
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -65,11 +67,11 @@ class RolesPaginated:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.default_role import DefaultRole
         from ..models.role import Role
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         limit = d.pop("limit")
 
         offset = d.pop("offset")
@@ -102,7 +104,7 @@ class RolesPaginated:
         return roles_paginated
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

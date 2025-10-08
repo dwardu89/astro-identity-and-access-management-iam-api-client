@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,37 +21,35 @@ class UpdateTeamRolesRequest:
     Attributes:
         organization_role (UpdateTeamRolesRequestOrganizationRole): The Team's Organization roles. Example:
             ORGANIZATION_MEMBER.
-        deployment_roles (Union[Unset, List['DeploymentRole']]): The user's updated Deployment roles. The Deployments
+        deployment_roles (Union[Unset, list['DeploymentRole']]): The user's updated Deployment roles. The Deployments
             you specify must belong to the Team's Organization.
-        workspace_roles (Union[Unset, List['WorkspaceRole']]): The Team's updated Workspace roles. The Workspaces you
+        workspace_roles (Union[Unset, list['WorkspaceRole']]): The Team's updated Workspace roles. The Workspaces you
             specify must belong to the Team's Organization.
     """
 
     organization_role: UpdateTeamRolesRequestOrganizationRole
-    deployment_roles: Union[Unset, List["DeploymentRole"]] = UNSET
-    workspace_roles: Union[Unset, List["WorkspaceRole"]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    deployment_roles: Union[Unset, list["DeploymentRole"]] = UNSET
+    workspace_roles: Union[Unset, list["WorkspaceRole"]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         organization_role = self.organization_role.value
 
-        deployment_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+        deployment_roles: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.deployment_roles, Unset):
             deployment_roles = []
             for deployment_roles_item_data in self.deployment_roles:
                 deployment_roles_item = deployment_roles_item_data.to_dict()
-
                 deployment_roles.append(deployment_roles_item)
 
-        workspace_roles: Union[Unset, List[Dict[str, Any]]] = UNSET
+        workspace_roles: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.workspace_roles, Unset):
             workspace_roles = []
             for workspace_roles_item_data in self.workspace_roles:
                 workspace_roles_item = workspace_roles_item_data.to_dict()
-
                 workspace_roles.append(workspace_roles_item)
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -65,11 +64,11 @@ class UpdateTeamRolesRequest:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.deployment_role import DeploymentRole
         from ..models.workspace_role import WorkspaceRole
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         organization_role = UpdateTeamRolesRequestOrganizationRole(d.pop("organizationRole"))
 
         deployment_roles = []
@@ -96,7 +95,7 @@ class UpdateTeamRolesRequest:
         return update_team_roles_request
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

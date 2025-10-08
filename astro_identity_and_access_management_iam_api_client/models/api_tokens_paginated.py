@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,28 +17,29 @@ class ApiTokensPaginated:
     Attributes:
         limit (int): The limit of values in this page. Example: 10.
         offset (int): The offset of values in this page.
-        tokens (List['ApiToken']): The list of API tokens in this page.
+        tokens (list['ApiToken']): The list of API tokens in this page.
         total_count (int): The total number of API tokens. Example: 100.
     """
 
     limit: int
     offset: int
-    tokens: List["ApiToken"]
+    tokens: list["ApiToken"]
     total_count: int
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         limit = self.limit
+
         offset = self.offset
+
         tokens = []
         for tokens_item_data in self.tokens:
             tokens_item = tokens_item_data.to_dict()
-
             tokens.append(tokens_item)
 
         total_count = self.total_count
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -51,10 +53,10 @@ class ApiTokensPaginated:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.api_token import ApiToken
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         limit = d.pop("limit")
 
         offset = d.pop("offset")
@@ -79,7 +81,7 @@ class ApiTokensPaginated:
         return api_tokens_paginated
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

@@ -5,34 +5,21 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.api_tokens_paginated import ApiTokensPaginated
 from ...models.error import Error
-from ...models.list_roles_scope_types_item import ListRolesScopeTypesItem
-from ...models.list_roles_sorts_item import ListRolesSortsItem
-from ...models.roles_paginated import RolesPaginated
+from ...models.list_agent_tokens_sorts_item import ListAgentTokensSortsItem
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     organization_id: str,
+    deployment_id: str,
     *,
-    include_default_roles: Union[Unset, bool] = UNSET,
-    scope_types: Union[Unset, list[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, int] = 0,
     limit: Union[Unset, int] = 20,
-    sorts: Union[Unset, list[ListRolesSortsItem]] = UNSET,
+    sorts: Union[Unset, list[ListAgentTokensSortsItem]] = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
-
-    params["includeDefaultRoles"] = include_default_roles
-
-    json_scope_types: Union[Unset, list[str]] = UNSET
-    if not isinstance(scope_types, Unset):
-        json_scope_types = []
-        for scope_types_item_data in scope_types:
-            scope_types_item = scope_types_item_data.value
-            json_scope_types.append(scope_types_item)
-
-    params["scopeTypes"] = json_scope_types
 
     params["offset"] = offset
 
@@ -51,7 +38,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/organizations/{organization_id}/roles",
+        "url": f"/organizations/{organization_id}/deployments/{deployment_id}/agent-tokens",
         "params": params,
     }
 
@@ -60,9 +47,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Error, RolesPaginated]]:
+) -> Optional[Union[ApiTokensPaginated, Error]]:
     if response.status_code == 200:
-        response_200 = RolesPaginated.from_dict(response.json())
+        response_200 = ApiTokensPaginated.from_dict(response.json())
 
         return response_200
 
@@ -99,7 +86,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Error, RolesPaginated]]:
+) -> Response[Union[ApiTokensPaginated, Error]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -110,38 +97,35 @@ def _build_response(
 
 def sync_detailed(
     organization_id: str,
+    deployment_id: str,
     *,
     client: AuthenticatedClient,
-    include_default_roles: Union[Unset, bool] = UNSET,
-    scope_types: Union[Unset, list[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, int] = 0,
     limit: Union[Unset, int] = 20,
-    sorts: Union[Unset, list[ListRolesSortsItem]] = UNSET,
-) -> Response[Union[Error, RolesPaginated]]:
-    """List roles
+    sorts: Union[Unset, list[ListAgentTokensSortsItem]] = UNSET,
+) -> Response[Union[ApiTokensPaginated, Error]]:
+    """List Agent API Tokens
 
-     List available user roles in an Organization.
+     List Agent API Tokens.
 
     Args:
         organization_id (str):
-        include_default_roles (Union[Unset, bool]):
-        scope_types (Union[Unset, list[ListRolesScopeTypesItem]]):
+        deployment_id (str):
         offset (Union[Unset, int]):  Default: 0.
         limit (Union[Unset, int]):  Default: 20.
-        sorts (Union[Unset, list[ListRolesSortsItem]]):
+        sorts (Union[Unset, list[ListAgentTokensSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, RolesPaginated]]
+        Response[Union[ApiTokensPaginated, Error]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        include_default_roles=include_default_roles,
-        scope_types=scope_types,
+        deployment_id=deployment_id,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -156,39 +140,36 @@ def sync_detailed(
 
 def sync(
     organization_id: str,
+    deployment_id: str,
     *,
     client: AuthenticatedClient,
-    include_default_roles: Union[Unset, bool] = UNSET,
-    scope_types: Union[Unset, list[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, int] = 0,
     limit: Union[Unset, int] = 20,
-    sorts: Union[Unset, list[ListRolesSortsItem]] = UNSET,
-) -> Optional[Union[Error, RolesPaginated]]:
-    """List roles
+    sorts: Union[Unset, list[ListAgentTokensSortsItem]] = UNSET,
+) -> Optional[Union[ApiTokensPaginated, Error]]:
+    """List Agent API Tokens
 
-     List available user roles in an Organization.
+     List Agent API Tokens.
 
     Args:
         organization_id (str):
-        include_default_roles (Union[Unset, bool]):
-        scope_types (Union[Unset, list[ListRolesScopeTypesItem]]):
+        deployment_id (str):
         offset (Union[Unset, int]):  Default: 0.
         limit (Union[Unset, int]):  Default: 20.
-        sorts (Union[Unset, list[ListRolesSortsItem]]):
+        sorts (Union[Unset, list[ListAgentTokensSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, RolesPaginated]
+        Union[ApiTokensPaginated, Error]
     """
 
     return sync_detailed(
         organization_id=organization_id,
+        deployment_id=deployment_id,
         client=client,
-        include_default_roles=include_default_roles,
-        scope_types=scope_types,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -197,38 +178,35 @@ def sync(
 
 async def asyncio_detailed(
     organization_id: str,
+    deployment_id: str,
     *,
     client: AuthenticatedClient,
-    include_default_roles: Union[Unset, bool] = UNSET,
-    scope_types: Union[Unset, list[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, int] = 0,
     limit: Union[Unset, int] = 20,
-    sorts: Union[Unset, list[ListRolesSortsItem]] = UNSET,
-) -> Response[Union[Error, RolesPaginated]]:
-    """List roles
+    sorts: Union[Unset, list[ListAgentTokensSortsItem]] = UNSET,
+) -> Response[Union[ApiTokensPaginated, Error]]:
+    """List Agent API Tokens
 
-     List available user roles in an Organization.
+     List Agent API Tokens.
 
     Args:
         organization_id (str):
-        include_default_roles (Union[Unset, bool]):
-        scope_types (Union[Unset, list[ListRolesScopeTypesItem]]):
+        deployment_id (str):
         offset (Union[Unset, int]):  Default: 0.
         limit (Union[Unset, int]):  Default: 20.
-        sorts (Union[Unset, list[ListRolesSortsItem]]):
+        sorts (Union[Unset, list[ListAgentTokensSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Error, RolesPaginated]]
+        Response[Union[ApiTokensPaginated, Error]]
     """
 
     kwargs = _get_kwargs(
         organization_id=organization_id,
-        include_default_roles=include_default_roles,
-        scope_types=scope_types,
+        deployment_id=deployment_id,
         offset=offset,
         limit=limit,
         sorts=sorts,
@@ -241,40 +219,37 @@ async def asyncio_detailed(
 
 async def asyncio(
     organization_id: str,
+    deployment_id: str,
     *,
     client: AuthenticatedClient,
-    include_default_roles: Union[Unset, bool] = UNSET,
-    scope_types: Union[Unset, list[ListRolesScopeTypesItem]] = UNSET,
     offset: Union[Unset, int] = 0,
     limit: Union[Unset, int] = 20,
-    sorts: Union[Unset, list[ListRolesSortsItem]] = UNSET,
-) -> Optional[Union[Error, RolesPaginated]]:
-    """List roles
+    sorts: Union[Unset, list[ListAgentTokensSortsItem]] = UNSET,
+) -> Optional[Union[ApiTokensPaginated, Error]]:
+    """List Agent API Tokens
 
-     List available user roles in an Organization.
+     List Agent API Tokens.
 
     Args:
         organization_id (str):
-        include_default_roles (Union[Unset, bool]):
-        scope_types (Union[Unset, list[ListRolesScopeTypesItem]]):
+        deployment_id (str):
         offset (Union[Unset, int]):  Default: 0.
         limit (Union[Unset, int]):  Default: 20.
-        sorts (Union[Unset, list[ListRolesSortsItem]]):
+        sorts (Union[Unset, list[ListAgentTokensSortsItem]]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Error, RolesPaginated]
+        Union[ApiTokensPaginated, Error]
     """
 
     return (
         await asyncio_detailed(
             organization_id=organization_id,
+            deployment_id=deployment_id,
             client=client,
-            include_default_roles=include_default_roles,
-            scope_types=scope_types,
             offset=offset,
             limit=limit,
             sorts=sorts,
